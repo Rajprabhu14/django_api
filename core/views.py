@@ -5,8 +5,14 @@ from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 
+
 class HelloView(APIView):
     permission_classes = (IsAuthenticated,)
+    
     def get(self, request):
         content = {'message': 'Hello, World'}
         return Response(content)
+
+# middleware for allow CORS
+
+
