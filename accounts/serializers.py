@@ -11,6 +11,12 @@ class UserSerializer(serializers.ModelSerializer):
             max_length=32,
             validators=[UniqueValidator(queryset=User.objects.all())]
             )
+    first_name = serializers.CharField(
+            max_length=32
+            )
+    last_name = serializers.CharField(
+            max_length=32
+            )
     # testcase response hiding of password field
     password = serializers.CharField(min_length=8, write_only=True)
 # EmailField & usernameField  that it is required and should be unique amongst all User objects in our database.
@@ -19,10 +25,12 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create_user(
                 validated_data['username'],
-                validated_data['email'],
-                validated_data['password'])
+                email=validated_data['email'],
+                password=validated_data['password'],
+                first_name=validated_data['first_name'],
+                last_name=validated_data['last_name'])
         return user
 
     class Meta:
         model = User
-        fields = ('email', 'username', 'email', 'password')
+        fields = ('email', 'username', 'email', 'password', 'first_name', 'last_name')
