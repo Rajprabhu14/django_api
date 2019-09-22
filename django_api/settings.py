@@ -155,3 +155,8 @@ STATIC_URL = '/static/'
 # AUTH_USER_MODEL = 'accounts.CustomUser'
 
 # SMTP settings
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'rajprabhu.kcube@gmail.com'
+EMAIL_HOST_PASSWORD = 'kCube@123'
+EMAIL_PORT = 587

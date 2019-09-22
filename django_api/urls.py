@@ -22,5 +22,5 @@ urlpatterns = [
     path('hello/', HelloView.as_view(), name='hello'),
     path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
-    path('accounts/', include('accounts.urls'))
+    path('accounts/', include(('accounts.urls', 'accounts'), namespace='accounts'))
 ]
