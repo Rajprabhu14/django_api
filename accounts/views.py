@@ -33,9 +33,8 @@ class CreateUser(APIView):
             user = serializer.save()
             if user:
                 current_site = get_current_site(request)
-                mail_subject = 'Activate your blog account'
+                mail_subject = 'Activate your webGIS account'
                 uid = urlsafe_base64_encode(force_bytes(user.pk))
-                print(type(uid))
                 message = render_to_string('acc_activation.html', {
                     'user': user,
                     'domain': current_site.domain,
@@ -44,7 +43,7 @@ class CreateUser(APIView):
                 })
                 to_email = request.data['email']
                 email = EmailMessage(mail_subject, message, to=[to_email])
-                email.send
+                email.send(fail_silently=False)
                 return Response({'message': 'Please confirm your email address to complete the registration'},
                                 status=status.HTTP_200_OK)
         return Response(serializer.errors,
@@ -52,9 +51,9 @@ class CreateUser(APIView):
 
 
 #activation link
-def activate_account(request, uidb64, token):
+def activate_account(request, uid64, token):
     try:
-        uid = force_text(urlsafe_base64_decode(uidb64))
+        uid = force_text(urlsafe_base64_decode(uid64))
         user = User.objects.get(pk=uid)
     except Exception as e:
         print(e)
@@ -63,7 +62,6 @@ def activate_account(request, uidb64, token):
         user.is_active = True
         user.save()
         login(request, user)
-        return redirect('/')
         return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
     else:
         return HttpResponse('Activation link is invalid!')  
